@@ -1,0 +1,30 @@
+{
+    "index": "index",
+    "deny": {
+        "ips": [
+            "192.168.0.10"
+        ]
+    },
+    "hosts": [
+        {
+            "host": "127.0.0.1",
+            "dir": "D:/www"
+        },
+        {
+            "host": "192.168.0.12",
+            "dir": "D:/www"
+        },
+        {
+            "host": "www.man.cn",
+            "dir": "D:/www"
+        },
+        {
+            "host": "man.cn",
+            "dir": "D:/www"
+        },
+        {
+            "host": "video.man.cn",
+            "dir": "D:/www/yingyuan/web"
+        }
+    ]
+}
