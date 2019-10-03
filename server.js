@@ -22,19 +22,24 @@ http
         ips.forEach(ip => {
             if (ip === remoteIp) res.end('404 file no found!')
         })
+        /* 获取host，即域名 */
         let host = req.headers.host
         /* 如果通過非80端口接入，會存在protocol，否則為null */
         let protocol = url.parse(host).protocol
+        if (protocol) host = protocol.slice(0, -1)
+        /* 格式化Url */
         let urlObject = url.parse(req.url, true)
+        /* 获取路径名 */
         let pathname = urlObject.pathname
         pathname = decodeURIComponent(pathname)
+        /* 获取后缀名 */
         let ext = path.parse(pathname).ext
-        if (protocol) host = protocol.slice(0, -1)
+        /* 查找访问的域名对应的相关配置 */
         let server = config.hosts.find((v, i) => {
             return v.host === host
-        })
+        })     
         /* 讀取匹配的路徑 */
-        if (!server.dir) res.end('域名为指向路径!')
+        if (!server.dir) res.end('域名未指向路径!')
         fs.readdir(server.dir, (error, data) => {
             if (error) res.end('域名指向路径错误')
         })
@@ -58,20 +63,22 @@ http
         }
         let dir = server.dir
         let filePath = dir + pathname
-        /* 以文件夾形式讀取Url */
+        /* 以文件夾/目录形式讀取Url */
         fs.readdir(filePath, (ed, dd) => {
             if (ed) {
-                /* 以省略後綴名html的形式讀取文件 */
+                /* 直接讀取文件 */
                 readFile(filePath + '')
                     .then(d1 => {
                         res.end(d1)
                     }, e1 => {
                         res.setHeader('Content-Type', 'text/html;chartset=utf-8')
+                        /* 以省略.htm的形式讀取文件 */
                         return readFile(filePath + '.htm')
                     })
                     .then(d2 => {
                         res.end(d2)
                     }, e2 => {
+                        /* 以省略.html的形式讀取文件 */
                         return readFile(filePath + '.html')
                     })
                     .then(d3 => {
@@ -80,22 +87,26 @@ http
                         res.end('404 file no found!')
                     })
             } else {
-                /* 讀取目錄下的index.html文件 */
+                /* 以html类型读取文件，所以设置响应头为'text/html;chartset=utf-8' */
                 res.setHeader('Content-Type', 'text/html;chartset=utf-8')
+                /* 讀取目錄下的index.html文件 */
                 readFile(filePath + '/' + index + '.html')
                     .then(d1 => {
                         res.end(d1)
                     }, e1 => {
+                        /* 讀取目錄下的index.htm文件 */
                         return readFile(filePath + '/' + index + '.htm')
                     })
                     .then(d2 => {
                         res.end(d2)
                     }, e2 => {
+                        /* 讀取目錄下的index文件 */
                         return readFile(filePath + '/' + index)
                     })
                     .then(d3 => {
                         res.end(d3)
-                    }, e3 => {/* 讀取目錄下的文件 */
+                    }, e3 => {
+                        /* 如果没有index文件，则讀取目錄下的文件 */
                         let pna = pathname.split('/')
                         pna.pop()
                         let name = pna.pop()
