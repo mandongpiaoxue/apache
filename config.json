@@ -1,8 +1,9 @@
 {
     "index": "index",
+    "port": 80,
     "deny": {
         "ips": [
-            "192.168.0.10"
+            "192.168.8.10"
         ]
     },
     "hosts": [
@@ -11,7 +12,11 @@
             "dir": "D:/www"
         },
         {
-            "host": "192.168.0.12",
+            "host": "192.168.8.29",
+            "dir": "D:/www"
+        },
+        {
+            "host": "localhost",
             "dir": "D:/www"
         },
         {
@@ -25,6 +30,14 @@
         {
             "host": "video.man.cn",
             "dir": "D:/www/yingyuan/web"
+        },
+        {
+            "host": "www.learn.com",
+            "dir": "D:/www/Vue/Learn/web/dist"
+        },
+        {
+            "host": "admin.learn.com",
+            "dir": "D:/www/Vue/Learn/admin/dist"
         }
     ]
 }
